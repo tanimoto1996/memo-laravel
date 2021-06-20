@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+// aa
 Route::get('/', 'App\Http\Controllers\Auth\LoginController@showLoginForm')->name('login.index');
 Route::get('/user', 'App\Http\Controllers\Auth\RegisterController@showRegistrationForm')->name('user.register');
 Route::get('/memo', function() {

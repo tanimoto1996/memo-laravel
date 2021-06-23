@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserCreateRequest;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -42,32 +45,37 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * ユーザー登録後、投稿画面に遷移する
+     * @param Request $request
+     * @return RedirectResponse
      */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+    public function register(UserCreateRequest $request) {
+
+        // Requests/UserCreateRequest.phpに記載する。
+
+        // validateファサードを使用
+        // $request->validate([
+        //     'name' => 'required|max:255|regex:/^[a-zA-Z0-9]+$/',
+        //     'email' => 'required|max:255|email|unique:users',
+        //     'password' => 'required|max:255|min:8|regex:/^[a-zA-Z0-9]+$/',
+        // ],
+        // [
+        //     // 正規表現で引っかかった時のエラー文
+        //     'name.regex' => ':attributeは半角英数字で入力してください。',
+        //     'password.regex' => ':attributeは半角英数字で入力してください。',
+        // ]);
+
+        $user = User::create ([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
         ]);
+
+        // RedirectlfAuthenticated.phpでミドルウェアを変更した（login済みしかmemoページにいけないように）ので
+        // 新規登録した後にmemoページに遷移するように設定する
+        $this->guard()->login($user);
+        // redirectヘルパーでリダイレクトする
+        return redirect()->route('memo.index');
     }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return \App\Models\User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
 }

@@ -6,7 +6,7 @@
         <div class="col-3 h-100 m-0 p-0 border-left border-right border-gray">
             <div class="left-memo-menu d-flex justify-content-between pt-2">
                 <div class="pl-3 pt-2">
-                    {{ $name }}さん、こんにちは。
+                    <a href="{{ route('user.profile') }}" class="text-primary" title="名前を変更する">{{ $name }}</a>さん、こんにちは。
                 </div>
                 <div class="pr-1">
                     <a href="{{ route('memo.add') }}" class="btn btn-success"><i class="fas fa-plus"></i></a>

@@ -84,7 +84,7 @@ class MemoController extends Controller
         $name = '';
         if($user) {
             if(7 < mb_strlen($user->name)) {
-                $name = mb_strlen($user->name, 0, 7) . "...";
+                $name = mb_substr($user->name, 0, 7) . "...";
             } else {
                 $name = $user->name;
             }

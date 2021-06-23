@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/memo/select', [MemoController::class, 'select'])->name('memo.select');
     Route::post('/memo/update', [MemoController::class, 'update'])->name('memo.update');
     Route::post('/memo/delete', [MemoController::class, 'delete'])->name('memo.delete');
+    Route::get('/memo/search', [MemoController::class, 'search'])->name('memo.search');
     Route::get('logout', [LoginController::class, 'logout'])->name('memo.logout');
     Route::get('/user/profile', [LoginController::class, 'profileChangeDisplay'])->name('user.profile');
     Route::post('/user/profile/update', [LoginController::class, 'profileUpdate'])->name('user.profile.update');

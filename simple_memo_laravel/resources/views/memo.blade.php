@@ -23,6 +23,26 @@
                 </div>
                 @endif
 
+                <!-- ---------------------------------------------------- -->
+                <div class="input-group d-block">
+                <form class="m-3" action="{{ route('memo.search') }}" method="get">
+                    @csrf
+                    <input type="text" class="form-control w-75 d-inline" name="search_title" placeholder="タイトル検索">
+                    <span class="input-group-btn">
+                        <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></span></button>
+                    </span>
+                </form>
+                </div>
+
+                @if (!empty($message))
+                <div class="alert alert-danger">
+                    <ul class="mb-0 mt-0">
+                        <li>{{ $message }}</li>
+                    </ul>
+                </div>
+                @endif
+                <!-- ---------------------------------------------------- -->
+                
                 @foreach ($memos as $memo)
                 <a href="{{ route('memo.select', ['id' => $memo->id]) }}" class="list-group-item list-group-item-action  @if ($select_memo) {{ $select_memo->id == $memo->id ? 'active' : '' }} @endif ">
                     <div class="d-flex w-100 justify-content-between">

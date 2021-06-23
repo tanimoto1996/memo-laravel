@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\Memo;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class MemoController extends Controller
         $memo->content = $request->edit_content;
 
         // updateでtrueが帰ってくる
-        if($memo->update()) {
+        if ($memo->update()) {
             session()->put('select_memo', $memo);
         } else {
             session()->remove('select_memo');
@@ -74,16 +75,37 @@ class MemoController extends Controller
         return redirect()->route('memo.index');
     }
 
+    public function search(Request $request)
+    {
+        $keyword_title = $request->search_title;
+        
+        $user_name = $this->getLoginUserName();
+        $select_memo = $request->session()->get('select_memo');
+        $search_result = Memo::where('user_id', Auth::id())
+                                ->where('title', 'like' , '%' . $keyword_title . '%')
+                                ->orderBy('updated_at', 'desc')
+                                ->get();
+        $message = "「" . $keyword_title . "」を含む名前の検索が完了しました。";
+        
+        return view('memo')->with([
+            'name' => $user_name,
+            'select_memo' => $select_memo,
+            'memos' => $search_result,
+            'message' => $message,
+        ]);
+    }
+
     /**
      * ログインユーザー名取得
      * @return string
      */
-    public function getLoginUserName() {
+    public function getLoginUserName()
+    {
         $user = Auth::user();
 
         $name = '';
-        if($user) {
-            if(7 < mb_strlen($user->name)) {
+        if ($user) {
+            if (7 < mb_strlen($user->name)) {
                 $name = mb_substr($user->name, 0, 7) . "...";
             } else {
                 $name = $user->name;
